@@ -9,14 +9,13 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.Swerve;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 
 public class Sub_Swerve extends SubsystemBase {
-  private final Sub_Modulo Modulo_1 = new Sub_Modulo(1, 2, false, false, 0, 0, false);
+  private final Sub_Modulo Modulo_1 = new Sub_Modulo(1, 2, false, false, 4, 0, false);
   private final AHRS gyro = new AHRS(SPI.Port.kMXP);
 
   public Sub_Swerve() {
