@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -16,41 +17,35 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Swerve;
 
-public class Sub_Modulo extends SubsystemBase {
+public class Sub_Modulo_Falcon extends SubsystemBase {
   //Se crean los objetos 
-    private final CANSparkMax driveMotor;
-    private final   CANSparkMax turningMotor;
+    private  TalonFX drivemotor;
+    private  TalonFX turningMotor;
 
-    private final  RelativeEncoder driveEncoder;
-    private final  RelativeEncoder turningEncoder;
 
-    private final  PIDController PIDgiro;
 
-    private final AnalogInput absoluteEncoder;
-    private final boolean absoluteEncoderReversed;
-    private final double absoluteEncoderOffsetRad;
+    private   PIDController PIDgiro;
+
+    private  AnalogInput absoluteEncoder;
+    private  boolean absoluteEncoderReversed;
+    private  double absoluteEncoderOffsetRad;
+
     //Tiene que llamarse igual 
     //Se crea un constructor, como si fuera un comando o una función para no tener que hacer 4 subsitemas diferentes (1 por modulo)
-    public Sub_Modulo (int Drive_Motor_ID, int Turn_Motor_ID, boolean Inverted_Drive_Motor, boolean Inverted_Turning_Motor,int Encoder_Absoluto_ID, double offset_encoder_abs,boolean inverted_encoder_abs){
+    public Sub_Modulo_Falcon (int Drive_Motor_ID, int Turn_Motor_ID, boolean Inverted_Drive_Motor, boolean Inverted_Turning_Motor,int Encoder_Absoluto_ID, double offset_encoder_abs,boolean inverted_encoder_abs){
         //Se dan los valores a los objetos que se habían creado antes
         this.absoluteEncoderOffsetRad=offset_encoder_abs;
         this.absoluteEncoderReversed=inverted_encoder_abs;
         absoluteEncoder = new AnalogInput(Encoder_Absoluto_ID);
-        turningMotor= new CANSparkMax(Turn_Motor_ID, MotorType.kBrushless);
-        driveMotor= new CANSparkMax(Drive_Motor_ID, MotorType.kBrushless);
+        turningMotor= new TalonFX(Turn_Motor_ID);
+        drivemotor = new TalonFX(Drive_Motor_ID);
 
-        driveMotor.setInverted(Inverted_Drive_Motor);
+        drivemotor.setInverted(Inverted_Drive_Motor);
         turningMotor.setInverted(Inverted_Turning_Motor);
 
-        driveEncoder=driveMotor.getEncoder();
-        turningEncoder=turningMotor.getEncoder();
+  
+        
 
-        driveEncoder.setPositionConversionFactor(Swerve.drive_motor_gear_ratio); //Gear ratio tomado de SDS se encuentra en la parte de constants
-        driveEncoder.setVelocityConversionFactor(Swerve.encoder_a_metros_por_segundos);//Se da por el gearratio y la llanta dividendolo por 6'
-
-
-        turningEncoder.setPositionConversionFactor(Swerve.encoder_a_radianes);//Radianes son más exactos que los angulos 
-        turningEncoder.setVelocityConversionFactor(Swerve.encoder_a_radianes_por_segundo);
 
         PIDgiro= new PIDController(0.02, 0, 0);//Falta checar valores para PID de giro 
         PIDgiro.enableContinuousInput(-Math.PI, Math.PI);//Permite trabajar con los valores de 180 a -180 
@@ -60,17 +55,17 @@ public class Sub_Modulo extends SubsystemBase {
     }
 
     public double getDrivePosition(){
-        return driveEncoder.getPosition();
+        return drivemotor.getPosition().getValueAsDouble()*Swerve.encoder_a_metros;
       }
 
     public double getTurningPosition(){
-        return turningEncoder.getPosition();
+        return turningMotor.getPosition().getValueAsDouble()*Swerve.encoder_a_radianes;
       }
     public double getDriveVelocity(){
-        return driveEncoder.getVelocity();
+        return drivemotor.getVelocity().getValueAsDouble()*Swerve.encoder_a_metros_por_segundos;
     }
     public double getTurningVelocity(){
-        return turningEncoder.getVelocity();
+        return turningMotor.getVelocity().getValueAsDouble()*Swerve.encoder_a_radianes_por_segundo;
     }
 
     public double getAbsoluteEncoderRadians(){
@@ -82,8 +77,8 @@ public class Sub_Modulo extends SubsystemBase {
     }
 
     public void resetEncoders(){
-        driveEncoder.setPosition(0);
-        turningEncoder.setPosition(getAbsoluteEncoderRadians());
+        drivemotor.setPosition(0);
+        turningMotor.setPosition(getAbsoluteEncoderRadians());
     }
 
     public SwerveModuleState getState(){
@@ -94,21 +89,19 @@ public class Sub_Modulo extends SubsystemBase {
         //Se pide un Swerve module state que permite darle una serie de velocidades y posiciónes a los modulos 
         //Si la velocidad del estado es muy poca no se manda nada 
         if (Math.abs(state.speedMetersPerSecond)<0.001){
-            driveMotor.set(0);
+            drivemotor.set(0);
             turningMotor.set(0);
             return;
         }
         
         state=SwerveModuleState.optimize(state, getState().angle);//330 grados y -30 grados es lo mismo, optimize puede hacer ese calculo 
         //y obtener la ruta más rápida 
-        driveMotor.set(state.speedMetersPerSecond/3.5);//3.5 es la velocidad máxima del sistema, se debe checar 
+        drivemotor.set(state.speedMetersPerSecond/3.5);//3.5 es la velocidad máxima del sistema, se debe checar 
         turningMotor.set(PIDgiro.calculate(getTurningPosition(),state.angle.getRadians()));
     }
     
     public void alto(){
-      driveMotor.set(0);
+      drivemotor.set(0);
       turningMotor.set(0);
     }
 }
-
-

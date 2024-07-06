@@ -15,7 +15,9 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 
 public class Sub_Swerve extends SubsystemBase {
+  //En este subsistema se unen los 4 modulos y el giroscopio 
   private final Sub_Modulo Modulo_1 = new Sub_Modulo(1, 2, false, false, 4, 0, false);
+  private final Sub_Modulo_Falcon Modulo_2 = new Sub_Modulo_Falcon(6, 5, false, false, 7, 0, false);
   private final AHRS gyro = new AHRS(SPI.Port.kMXP);
 
   public Sub_Swerve() {
@@ -37,6 +39,7 @@ public class Sub_Swerve extends SubsystemBase {
   }
 
   public Rotation2d get2Drotation(){
+    //Permite cambiar de angulos a un objeto de Rotation 2D
     return Rotation2d.fromDegrees(getHeadding());
 
   }
@@ -46,7 +49,9 @@ public class Sub_Swerve extends SubsystemBase {
   }
 
   public void setModuleStates(SwerveModuleState[] desiredModuleStates){
+    //Se genera un arreglo de swerve module state para poder mandarlos a los diferentes modulos de acuerdo a posición 
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredModuleStates, 3.5);
     Modulo_1.setDesiredState(desiredModuleStates[0]);
+    Modulo_2.setDesiredState(desiredModuleStates[1]);
   }
 }

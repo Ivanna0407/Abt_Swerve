@@ -23,8 +23,8 @@ public final class Constants {
   public static class Swerve{
     // Los ratios se deben checar porque no estoy segura si son correctos 
     public static final double drive_motor_gear_ratio = 1/6.75;
-    public static final double turning_motor_gear_ratio = 1/6.75;
-    public static final double diametro_llanta=0.1016; //En metros son 4 pulgadas 
+    public static final double turning_motor_gear_ratio = 1/6.75; //Ambos gearratios sacados de SDS 
+    public static final double diametro_llanta=0.1016; //Valor esta en metros son 4 pulgadas 
     public static final double encoder_a_metros= drive_motor_gear_ratio*Math.PI*diametro_llanta;
     public static final double encoder_a_metros_por_segundos = encoder_a_metros/60;
     public static final double encoder_a_radianes= turning_motor_gear_ratio*2*Math.PI;
