@@ -16,7 +16,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 public class Sub_Swerve extends SubsystemBase {
   //En este subsistema se unen los 4 modulos y el giroscopio 
-  private final Sub_Modulo Modulo_1 = new Sub_Modulo(1, 2, false, false, 4, 0, false);
+  private final Sub_Modulo Modulo_1 = new Sub_Modulo(10, 9, false, false, 4, 0.125, false);
   private final Sub_Modulo_Falcon Modulo_2 = new Sub_Modulo_Falcon(6, 5, false, false, 7, 0, false);
   private final AHRS gyro = new AHRS(SPI.Port.kMXP);
 
@@ -28,6 +28,7 @@ public class Sub_Swerve extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Heading", getHeadding());
+    SmartDashboard.putNumber("Encoderabs", Modulo_1.getAbsoluteEncoderRadians());
   }
 
   public void zeroHeading(){

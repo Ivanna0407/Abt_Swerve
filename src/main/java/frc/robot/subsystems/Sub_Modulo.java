@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -26,7 +27,7 @@ public class Sub_Modulo extends SubsystemBase {
 
     private final  PIDController PIDgiro;
 
-    private final AnalogInput absoluteEncoder;
+    private final CANcoder absoluteEncoder;
     private final boolean absoluteEncoderReversed;
     private final double absoluteEncoderOffsetRad;
     //Tiene que llamarse igual 
@@ -35,7 +36,7 @@ public class Sub_Modulo extends SubsystemBase {
         //Se dan los valores a los objetos que se habían creado antes
         this.absoluteEncoderOffsetRad=offset_encoder_abs;
         this.absoluteEncoderReversed=inverted_encoder_abs;
-        absoluteEncoder = new AnalogInput(Encoder_Absoluto_ID);
+        absoluteEncoder = new CANcoder(Encoder_Absoluto_ID);
         turningMotor= new CANSparkMax(Turn_Motor_ID, MotorType.kBrushless);
         driveMotor= new CANSparkMax(Drive_Motor_ID, MotorType.kBrushless);
 
@@ -52,7 +53,7 @@ public class Sub_Modulo extends SubsystemBase {
         turningEncoder.setPositionConversionFactor(Swerve.encoder_a_radianes);//Radianes son más exactos que los angulos 
         turningEncoder.setVelocityConversionFactor(Swerve.encoder_a_radianes_por_segundo);
 
-        PIDgiro= new PIDController(0.02, 0, 0);//Falta checar valores para PID de giro 
+        PIDgiro= new PIDController(0.005, 0, 0);//Falta checar valores para PID de giro 
         PIDgiro.enableContinuousInput(-Math.PI, Math.PI);//Permite trabajar con los valores de 180 a -180 
 
         resetEncoders();
@@ -75,7 +76,7 @@ public class Sub_Modulo extends SubsystemBase {
 
     public double getAbsoluteEncoderRadians(){
         //Al ser un analog input se tiene que checar que valores muestra 
-        double angulo =absoluteEncoder.getVoltage()/ RobotController.getVoltage5V();
+        double angulo =absoluteEncoder.getPosition().getValueAsDouble();
         angulo*=2.0*Math.PI;
         angulo-=absoluteEncoderOffsetRad;
         return angulo* (absoluteEncoderReversed ? -1.0:1.0);

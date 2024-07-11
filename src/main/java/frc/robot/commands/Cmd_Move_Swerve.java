@@ -46,6 +46,7 @@ public class Cmd_Move_Swerve extends Command {
     else{
       chassisSpeeds= new ChassisSpeeds(velocidadx, velocidady, velocidad_giros);
     }
+    System.out.println(velocidadx);
 
     //Manda un arreglo de estados de modulos que pasan por un objeto de Swerve drive kinematics para poder generar las velocidades
     SwerveModuleState[] moduleStates=Swerve.swervekinematics.toSwerveModuleStates(chassisSpeeds);
