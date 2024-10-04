@@ -7,12 +7,12 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Swerve;
@@ -53,8 +53,11 @@ public class Sub_Modulo extends SubsystemBase {
         turningEncoder.setPositionConversionFactor(Swerve.encoder_a_radianes);//Radianes son más exactos que los angulos 
         turningEncoder.setVelocityConversionFactor(Swerve.encoder_a_radianes_por_segundo);
 
-        PIDgiro= new PIDController(0.005, 0, 0);//Falta checar valores para PID de giro 
+        PIDgiro= new PIDController(.25, 0, 0);//Falta checar valores para PID de giro 
         PIDgiro.enableContinuousInput(-Math.PI, Math.PI);//Permite trabajar con los valores de 180 a -180 
+
+        driveMotor.setIdleMode(IdleMode.kBrake);
+        turningMotor.setIdleMode(IdleMode.kBrake);
 
         resetEncoders();
         
@@ -102,7 +105,7 @@ public class Sub_Modulo extends SubsystemBase {
         
         state=SwerveModuleState.optimize(state, getState().angle);//330 grados y -30 grados es lo mismo, optimize puede hacer ese calculo 
         //y obtener la ruta más rápida 
-        driveMotor.set(state.speedMetersPerSecond/3.5);//3.5 es la velocidad máxima del sistema, se debe checar 
+        driveMotor.set(state.speedMetersPerSecond/2);//3.5 es la velocidad máxima del sistema, se debe checar 
         turningMotor.set(PIDgiro.calculate(getTurningPosition(),state.angle.getRadians()));
     }
     

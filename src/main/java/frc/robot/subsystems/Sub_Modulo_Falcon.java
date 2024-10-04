@@ -45,7 +45,7 @@ public class Sub_Modulo_Falcon extends SubsystemBase {
         
 
 
-        PIDgiro= new PIDController(2, 0, 0);//Falta checar valores para PID de giro 
+        PIDgiro= new PIDController(.99, 0, 0);//Falta checar valores para PID de giro 
         PIDgiro.enableContinuousInput(-Math.PI, Math.PI);//Permite trabajar con los valores de 180 a -180 
 
         resetEncoders();
@@ -94,7 +94,7 @@ public class Sub_Modulo_Falcon extends SubsystemBase {
         
         state=SwerveModuleState.optimize(state, getState().angle);//330 grados y -30 grados es lo mismo, optimize puede hacer ese calculo 
         //y obtener la ruta más rápida 
-        drivemotor.set(state.speedMetersPerSecond/4.5);//3.5 es la velocidad máxima del sistema, se debe checar 
+        drivemotor.set(state.speedMetersPerSecond/2);//3.5 es la velocidad máxima del sistema, se debe checar 
         turningMotor.set(PIDgiro.calculate(getTurningPosition(),state.angle.getRadians()));
     }
     

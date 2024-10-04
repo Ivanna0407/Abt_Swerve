@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Sub_Pruebas extends SubsystemBase {
   /** Creates a new Sub_Pruebas. */
-  private final CANSparkMax Motor_1 = new CANSparkMax(3, MotorType.kBrushless);
-  private final CANSparkMax Motor_2 = new CANSparkMax(1, MotorType.kBrushless);
+  private final CANSparkMax Motor_1 = new CANSparkMax(80, MotorType.kBrushless);
+  private final CANSparkMax Motor_2 = new CANSparkMax(70, MotorType.kBrushless);
 
   public Sub_Pruebas() {
     Motor_1.restoreFactoryDefaults();
