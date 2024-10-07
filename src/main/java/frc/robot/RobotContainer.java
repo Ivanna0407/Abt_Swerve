@@ -8,9 +8,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Cmd_Move_Swerve;
-import frc.robot.commands.Cmd_Pruebas;
 import frc.robot.commands.Cmd_Zero_Heading;
-import frc.robot.subsystems.Sub_Pruebas;
 import frc.robot.subsystems.Sub_Swerve;
 
 /**
@@ -22,13 +20,11 @@ import frc.robot.subsystems.Sub_Swerve;
 public class RobotContainer {
  
   private final Sub_Swerve Swerve= new Sub_Swerve();
-  private final Sub_Pruebas Pruebas= new Sub_Pruebas();
   
   CommandXboxController Joydrive= new CommandXboxController(0);
  
   public RobotContainer() {
     Swerve.setDefaultCommand(new Cmd_Move_Swerve(Swerve,() -> Joydrive.getLeftX(),() -> Joydrive.getLeftY(), () -> Joydrive.getRightX(), ()-> Joydrive.x().getAsBoolean()));
-   // Pruebas.setDefaultCommand(new Cmd_Pruebas(Pruebas, () -> Joydrive.getRightTriggerAxis(), () -> Joydrive.getLeftTriggerAxis()));
     configureBindings();
   }
 

@@ -49,11 +49,10 @@ public class Sub_Modulo extends SubsystemBase {
         driveEncoder.setPositionConversionFactor(Swerve.drive_motor_gear_ratio); //Gear ratio tomado de SDS se encuentra en la parte de constants
         driveEncoder.setVelocityConversionFactor(Swerve.encoder_a_metros_por_segundos);//Se da por el gearratio y la llanta dividendolo por 6'
 
-
         turningEncoder.setPositionConversionFactor(Swerve.encoder_a_radianes);//Radianes son más exactos que los angulos 
         turningEncoder.setVelocityConversionFactor(Swerve.encoder_a_radianes_por_segundo);
 
-        PIDgiro= new PIDController(.25, 0, 0);//Falta checar valores para PID de giro 
+        PIDgiro= new PIDController(.1, 0, 0);//Falta checar valores para PID de giro 
         PIDgiro.enableContinuousInput(-Math.PI, Math.PI);//Permite trabajar con los valores de 180 a -180 
 
         driveMotor.setIdleMode(IdleMode.kBrake);
@@ -79,7 +78,7 @@ public class Sub_Modulo extends SubsystemBase {
 
     public double getAbsoluteEncoderRadians(){
         //Al ser un analog input se tiene que checar que valores muestra 
-        double angulo =absoluteEncoder.getPosition().getValueAsDouble();
+        double angulo =absoluteEncoder.getAbsolutePosition().getValueAsDouble(); 
         angulo*=2.0*Math.PI;
         angulo-=absoluteEncoderOffsetRad;
         return angulo* (absoluteEncoderReversed ? -1.0:1.0);
@@ -105,7 +104,7 @@ public class Sub_Modulo extends SubsystemBase {
         
         state=SwerveModuleState.optimize(state, getState().angle);//330 grados y -30 grados es lo mismo, optimize puede hacer ese calculo 
         //y obtener la ruta más rápida 
-        driveMotor.set(state.speedMetersPerSecond/2);//3.5 es la velocidad máxima del sistema, se debe checar 
+        driveMotor.set(state.speedMetersPerSecond/3);//3.5 es la velocidad máxima del sistema, se debe checar 
         turningMotor.set(PIDgiro.calculate(getTurningPosition(),state.angle.getRadians()));
     }
     

@@ -17,10 +17,10 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Sub_Swerve extends SubsystemBase {
   //En este subsistema se unen los 4 modulos y el giroscopio 
-  private final Sub_Modulo Modulo_1 = new Sub_Modulo(1, 2, false, false, 9, .4321, false);
-  private final Sub_Modulo Modulo_2 = new Sub_Modulo(3, 4, false, false, 10, -2.89, false);
-  private final Sub_Modulo Modulo_3 = new Sub_Modulo(5, 6, false, false, 11, 0.4596, false);
-  private final Sub_Modulo Modulo_4 = new Sub_Modulo(7, 8, false, false, 12, .1784, false);
+  private final Sub_Modulo Modulo_1 = new Sub_Modulo(1, 2, true, false, 9,  0, false);
+  private final Sub_Modulo Modulo_2 = new Sub_Modulo(3, 4, false, false, 10, 0, false);
+  private final Sub_Modulo Modulo_3 = new Sub_Modulo(5, 6, false, false, 11, 0, false);
+  private final Sub_Modulo Modulo_4 = new Sub_Modulo(7, 8, true, false, 12,0 , false);
   private final AHRS gyro = new AHRS(SPI.Port.kMXP);
 
   
@@ -34,13 +34,12 @@ public class Sub_Swerve extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Heading", getHeadding());
-    SmartDashboard.putNumber("Encoderabs", Modulo_1.getAbsoluteEncoderRadians());
     SmartDashboard.putNumber("Velocidad turning", Modulo_1.getTurningVelocity());
     SmartDashboard.putNumber("Abs_1", Modulo_1.getAbsoluteEncoderRadians());
     SmartDashboard.putNumber("Abs_2", Modulo_2.getAbsoluteEncoderRadians());
     SmartDashboard.putNumber("Abs_3", Modulo_3.getAbsoluteEncoderRadians());
     SmartDashboard.putNumber("Abs_4", Modulo_4.getAbsoluteEncoderRadians());
-    
+    SmartDashboard.putNumber("Gyro", gyro.getAngle());
   }
 
   public void zeroHeading(){
@@ -66,10 +65,17 @@ public class Sub_Swerve extends SubsystemBase {
 
   public void setModuleStates(SwerveModuleState[] desiredModuleStates){
     //Se genera un arreglo de swerve module state para poder mandarlos a los diferentes modulos de acuerdo a posición 
-    SwerveDriveKinematics.desaturateWheelSpeeds(desiredModuleStates, 1.5);
+    SwerveDriveKinematics.desaturateWheelSpeeds(desiredModuleStates, 3);
     Modulo_1.setDesiredState(desiredModuleStates[0]);
     Modulo_2.setDesiredState(desiredModuleStates[1]);
     Modulo_3.setDesiredState(desiredModuleStates[2]);
     Modulo_4.setDesiredState(desiredModuleStates[3]);
+  }
+
+  public void resetAllEncoders(){
+    Modulo_1.resetEncoders();
+    Modulo_2.resetEncoders();
+    Modulo_3.resetEncoders();
+    Modulo_4.resetEncoders();
   }
 }
