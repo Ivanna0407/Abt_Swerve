@@ -40,6 +40,9 @@ public class Sub_Modulo extends SubsystemBase {
         turningMotor= new CANSparkMax(Turn_Motor_ID, MotorType.kBrushless);
         driveMotor= new CANSparkMax(Drive_Motor_ID, MotorType.kBrushless);
 
+        driveMotor.restoreFactoryDefaults();
+        turningMotor.restoreFactoryDefaults();
+
         driveMotor.setInverted(Inverted_Drive_Motor);
         turningMotor.setInverted(Inverted_Turning_Motor);
 
@@ -52,7 +55,7 @@ public class Sub_Modulo extends SubsystemBase {
         turningEncoder.setPositionConversionFactor(Swerve.encoder_a_radianes);//Radianes son más exactos que los angulos 
         turningEncoder.setVelocityConversionFactor(Swerve.encoder_a_radianes_por_segundo);
 
-        PIDgiro= new PIDController(.1, 0, 0);//Falta checar valores para PID de giro 
+        PIDgiro= new PIDController(.08, 0, 0);//Falta checar valores para PID de giro 
         PIDgiro.enableContinuousInput(-Math.PI, Math.PI);//Permite trabajar con los valores de 180 a -180 
 
         driveMotor.setIdleMode(IdleMode.kBrake);
@@ -79,8 +82,9 @@ public class Sub_Modulo extends SubsystemBase {
     public double getAbsoluteEncoderRadians(){
         //Al ser un analog input se tiene que checar que valores muestra 
         double angulo =absoluteEncoder.getAbsolutePosition().getValueAsDouble(); 
-        angulo*=2.0*Math.PI;
         angulo-=absoluteEncoderOffsetRad;
+        angulo*=2.0*Math.PI;
+        
         return angulo* (absoluteEncoderReversed ? -1.0:1.0);
     }
 

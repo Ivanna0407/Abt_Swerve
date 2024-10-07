@@ -17,10 +17,10 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Sub_Swerve extends SubsystemBase {
   //En este subsistema se unen los 4 modulos y el giroscopio 
-  private final Sub_Modulo Modulo_1 = new Sub_Modulo(1, 2, true, false, 9,  0, false);
-  private final Sub_Modulo Modulo_2 = new Sub_Modulo(3, 4, false, false, 10, 0, false);
-  private final Sub_Modulo Modulo_3 = new Sub_Modulo(5, 6, false, false, 11, 0, false);
-  private final Sub_Modulo Modulo_4 = new Sub_Modulo(7, 8, true, false, 12,0 , false);
+  private final Sub_Modulo Modulo_1 = new Sub_Modulo(1, 2, true, true, 9,  .28, false);
+  private final Sub_Modulo Modulo_2 = new Sub_Modulo(3, 4, false, false, 10, .22, false);
+  private final Sub_Modulo Modulo_3 = new Sub_Modulo(5, 6, false, false, 11, .25, false);
+  private final Sub_Modulo Modulo_4 = new Sub_Modulo(7, 8, true, true, 12,.26 , false);
   private final AHRS gyro = new AHRS(SPI.Port.kMXP);
 
   
@@ -40,6 +40,9 @@ public class Sub_Swerve extends SubsystemBase {
     SmartDashboard.putNumber("Abs_3", Modulo_3.getAbsoluteEncoderRadians());
     SmartDashboard.putNumber("Abs_4", Modulo_4.getAbsoluteEncoderRadians());
     SmartDashboard.putNumber("Gyro", gyro.getAngle());
+    SmartDashboard.putNumber("Yaw", gyro.getYaw());
+    SmartDashboard.putNumber("Pitch", gyro.getPitch());
+    SmartDashboard.putNumber("Roll", gyro.getRoll());
   }
 
   public void zeroHeading(){

@@ -27,7 +27,7 @@ public class Cmd_Move_Swerve extends Command {
  
   @Override
   public void initialize() {
-    sub_Swerve.resetAllEncoders();
+    //sub_Swerve.resetAllEncoders();
     sub_Swerve.zeroHeading();
   }
 
