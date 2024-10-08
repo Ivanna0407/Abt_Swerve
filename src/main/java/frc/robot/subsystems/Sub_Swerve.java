@@ -12,15 +12,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.networktables.NetworkTableInstance;
+
 
 
 public class Sub_Swerve extends SubsystemBase {
   //En este subsistema se unen los 4 modulos y el giroscopio 
-  private final Sub_Modulo Modulo_1 = new Sub_Modulo(1, 2, true, true, 9,  .28, false);
-  private final Sub_Modulo Modulo_2 = new Sub_Modulo(3, 4, false, false, 10, .22, false);
-  private final Sub_Modulo Modulo_3 = new Sub_Modulo(5, 6, false, false, 11, .25, false);
-  private final Sub_Modulo Modulo_4 = new Sub_Modulo(7, 8, true, true, 12,.26 , false);
+  private final Sub_Modulo Modulo_1 = new Sub_Modulo(1, 2, false, false, 9,  0, false);
+  private final Sub_Modulo Modulo_2 = new Sub_Modulo(3, 4, false, false, 10, 0, false);
+  private final Sub_Modulo Modulo_3 = new Sub_Modulo(5, 6, false, false, 11, 0, false);
+  private final Sub_Modulo Modulo_4 = new Sub_Modulo(7, 8, false, false, 12,0 , false);
   private final AHRS gyro = new AHRS(SPI.Port.kMXP);
 
   
@@ -43,6 +43,7 @@ public class Sub_Swerve extends SubsystemBase {
     SmartDashboard.putNumber("Yaw", gyro.getYaw());
     SmartDashboard.putNumber("Pitch", gyro.getPitch());
     SmartDashboard.putNumber("Roll", gyro.getRoll());
+    
   }
 
   public void zeroHeading(){
