@@ -56,8 +56,8 @@ public class Sub_Modulo extends SubsystemBase {
         turningEncoder.setPositionConversionFactor(Swerve.encoder_a_radianes);//Radianes son más exactos que los angulos 
         turningEncoder.setVelocityConversionFactor(Swerve.encoder_a_radianes_por_segundo);
 
-        PIDgiro= new PIDController(.1, 0, 0);//Falta checar valores para PID de giro 
-        PIDgiro.enableContinuousInput(0, Math.PI);//Permite trabajar con los valores de 180 a -180 
+        PIDgiro= new PIDController(.1, .00, 0.00);//Falta checar valores para PID de giro 
+        PIDgiro.enableContinuousInput(-Math.PI*2, Math.PI*2);//Permite trabajar con los valores de 180 a -180 
 
         driveMotor.setIdleMode(IdleMode.kBrake);
         turningMotor.setIdleMode(IdleMode.kBrake);
@@ -90,7 +90,7 @@ public class Sub_Modulo extends SubsystemBase {
     public double getAbsoluteEncoderRadians(){
         //Al ser un analog input se tiene que checar que valores muestra 
         double angulo =(absoluteEncoder.getAbsolutePosition().getValueAsDouble()*2* Math.PI);
-        angulo-=absoluteEncoderOffsetRad; 
+        //angulo-=absoluteEncoderOffsetRad; 
         /* 
         if (angulo > 2 * Math.PI){
           angulo -= 2* Math.PI;

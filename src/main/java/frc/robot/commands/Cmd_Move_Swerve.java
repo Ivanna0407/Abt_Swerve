@@ -35,7 +35,7 @@ public class Cmd_Move_Swerve extends Command {
   @Override
   public void execute() {
     double velocidadx=Xaxis.get();
-    double velocidady=Yaxis.get();
+    double velocidady=Yaxis.get()*-1;
     double velocidad_giros=giros.get();
 
     if (Math.abs(Xaxis.get())<0.1){velocidadx=0;}
