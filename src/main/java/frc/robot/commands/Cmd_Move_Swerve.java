@@ -27,7 +27,7 @@ public class Cmd_Move_Swerve extends Command {
  
   @Override
   public void initialize() {
-    //sub_Swerve.resetAllEncoders();
+    
     sub_Swerve.zeroHeading();
   }
 
@@ -47,7 +47,7 @@ public class Cmd_Move_Swerve extends Command {
       chassisSpeeds= ChassisSpeeds.fromFieldRelativeSpeeds(velocidadx, velocidady, velocidad_giros, sub_Swerve.get2Drotation());
     }
     else{
-      chassisSpeeds= new ChassisSpeeds(velocidadx, velocidady, velocidad_giros);
+      chassisSpeeds= new ChassisSpeeds(velocidady, velocidadx, velocidad_giros);
     }
     
 

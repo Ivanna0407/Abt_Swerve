@@ -17,7 +17,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 public class Sub_Swerve extends SubsystemBase {
   //En este subsistema se unen los 4 modulos y el giroscopio 
-  private final Sub_Modulo Modulo_1 = new Sub_Modulo(1, 2, false, false, 9,  0, false);
+  private final Sub_Modulo Modulo_1 = new Sub_Modulo(1, 22, false, false, 9,  0, false);
   private final Sub_Modulo Modulo_2 = new Sub_Modulo(3, 4, false, false, 10, 0, false);
   private final Sub_Modulo Modulo_3 = new Sub_Modulo(5, 6, false, false, 11, 0, false);
   private final Sub_Modulo Modulo_4 = new Sub_Modulo(7, 8, false, false, 12,0 , false);
@@ -69,7 +69,7 @@ public class Sub_Swerve extends SubsystemBase {
 
   public void setModuleStates(SwerveModuleState[] desiredModuleStates){
     //Se genera un arreglo de swerve module state para poder mandarlos a los diferentes modulos de acuerdo a posición 
-    SwerveDriveKinematics.desaturateWheelSpeeds(desiredModuleStates, 3);
+    SwerveDriveKinematics.desaturateWheelSpeeds(desiredModuleStates, 2);
     Modulo_1.setDesiredState(desiredModuleStates[0]);
     Modulo_2.setDesiredState(desiredModuleStates[1]);
     Modulo_3.setDesiredState(desiredModuleStates[2]);
