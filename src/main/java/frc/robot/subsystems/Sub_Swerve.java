@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 
 
 
@@ -22,12 +24,16 @@ public class Sub_Swerve extends SubsystemBase {
   private final Sub_Modulo Modulo_3 = new Sub_Modulo(5, 6, false, false, 11, 0, false);
   private final Sub_Modulo Modulo_4 = new Sub_Modulo(7, 8, true, false, 12,0 , false);
   private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+  private final StructArrayPublisher<SwerveModuleState> publisher;
   
 
   
 
   public Sub_Swerve() {
     new Thread(()->{try {Thread.sleep(1000); zeroHeading();}catch(Exception e ){}}).start();
+    //publisher = new NetworkTableInstance.getDefault().getStructArrayTpoic("/Swervemodulestates", SwerveModuleState.struct).publish();
+    publisher = NetworkTableInstance.getDefault()
+      .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
     
   }
 
@@ -47,6 +53,7 @@ public class Sub_Swerve extends SubsystemBase {
     SmartDashboard.putNumber("Giro_2", Modulo_2.getTurningVelocity());
     SmartDashboard.putNumber("Tracción_1", Modulo_1.getDriveVelocity());
     SmartDashboard.putNumber("Giro_1", Modulo_1.getTurningVelocity());
+    publisher.set(new SwerveModuleState[]{Modulo_1.getState(),Modulo_2.getState(),Modulo_3.getState(),Modulo_4.getState()});
     
   }
 
