@@ -17,11 +17,12 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 public class Sub_Swerve extends SubsystemBase {
   //En este subsistema se unen los 4 modulos y el giroscopio 
-  private final Sub_Modulo Modulo_1 = new Sub_Modulo(1, 22, false, false, 9,  0, false);
-  private final Sub_Modulo Modulo_2 = new Sub_Modulo(3, 4, false, false, 10, 0, false);
+  private final Sub_Modulo Modulo_1 = new Sub_Modulo(1, 22, true, false, 9,  0, false);
+  private final Sub_Modulo Modulo_2 = new Sub_Modulo(3, 4, false, true, 10, 0, false);
   private final Sub_Modulo Modulo_3 = new Sub_Modulo(5, 6, false, false, 11, 0, false);
-  private final Sub_Modulo Modulo_4 = new Sub_Modulo(7, 8, false, false, 12,0 , false);
+  private final Sub_Modulo Modulo_4 = new Sub_Modulo(7, 8, true, false, 12,0 , false);
   private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+  
 
   
 
@@ -34,7 +35,6 @@ public class Sub_Swerve extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Heading", getHeadding());
-    SmartDashboard.putNumber("Velocidad turning", Modulo_1.getTurningVelocity());
     SmartDashboard.putNumber("Abs_1", Modulo_1.getAbsoluteEncoderRadians());
     SmartDashboard.putNumber("Abs_2", Modulo_2.getAbsoluteEncoderRadians());
     SmartDashboard.putNumber("Abs_3", Modulo_3.getAbsoluteEncoderRadians());
@@ -43,6 +43,10 @@ public class Sub_Swerve extends SubsystemBase {
     SmartDashboard.putNumber("Yaw", gyro.getYaw());
     SmartDashboard.putNumber("Pitch", gyro.getPitch());
     SmartDashboard.putNumber("Roll", gyro.getRoll());
+    SmartDashboard.putNumber("Tracción_2", Modulo_2.getDriveVelocity());
+    SmartDashboard.putNumber("Giro_2", Modulo_2.getTurningVelocity());
+    SmartDashboard.putNumber("Tracción_1", Modulo_1.getDriveVelocity());
+    SmartDashboard.putNumber("Giro_1", Modulo_1.getTurningVelocity());
     
   }
 
@@ -69,7 +73,7 @@ public class Sub_Swerve extends SubsystemBase {
 
   public void setModuleStates(SwerveModuleState[] desiredModuleStates){
     //Se genera un arreglo de swerve module state para poder mandarlos a los diferentes modulos de acuerdo a posición 
-    SwerveDriveKinematics.desaturateWheelSpeeds(desiredModuleStates, 2);
+    SwerveDriveKinematics.desaturateWheelSpeeds(desiredModuleStates, 2.5);
     Modulo_1.setDesiredState(desiredModuleStates[0]);
     Modulo_2.setDesiredState(desiredModuleStates[1]);
     Modulo_3.setDesiredState(desiredModuleStates[2]);

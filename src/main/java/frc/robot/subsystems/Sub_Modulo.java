@@ -56,20 +56,11 @@ public class Sub_Modulo extends SubsystemBase {
         turningEncoder.setPositionConversionFactor(Swerve.encoder_a_radianes);//Radianes son más exactos que los angulos 
         turningEncoder.setVelocityConversionFactor(Swerve.encoder_a_radianes_por_segundo);
 
-        PIDgiro= new PIDController(.08, .00, 0.00);//Falta checar valores para PID de giro 
-        PIDgiro.enableContinuousInput(-Math.PI*2, Math.PI*2);//Permite trabajar con los valores de 180 a -180 
+        PIDgiro= new PIDController(.08, .005, 0.00);//
+        PIDgiro.enableContinuousInput(0, Math.PI*2);//Permite trabajar con los valores de 180 a -180 
 
         driveMotor.setIdleMode(IdleMode.kBrake);
         turningMotor.setIdleMode(IdleMode.kBrake);
-        /* 
-        CANcoderConfigurator cfg = absoluteEncoder.getConfigurator();
-        cfg.apply(new CANcoderConfiguration());
-        MagnetSensorConfigs  magnetSensorConfiguration = new MagnetSensorConfigs();
-        cfg.refresh(magnetSensorConfiguration);
-        cfg.apply(magnetSensorConfiguration
-                  .withAbsoluteSensorRange(AbsoluteSensorRangeValue.Unsigned_0To1)
-                  .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive));
-                  */
 
         resetEncoders();
         
@@ -93,14 +84,7 @@ public class Sub_Modulo extends SubsystemBase {
         //Al ser un analog input se tiene que checar que valores muestra 
         double angulo =(absoluteEncoder.getAbsolutePosition().getValueAsDouble()*2* Math.PI);
         //angulo-=absoluteEncoderOffsetRad; 
-         
-        if (angulo > 2 * Math.PI){
-          angulo -= 2* Math.PI;
-        }
-    
-        if (angulo < 0){
-          angulo += 2 * Math.PI;
-        }
+        
         
         if (absoluteEncoderReversed){
           angulo = 2 * Math.PI - angulo;
@@ -130,8 +114,9 @@ public class Sub_Modulo extends SubsystemBase {
         
         state=SwerveModuleState.optimize(state, getState().angle);//330 grados y -30 grados es lo mismo, optimize puede hacer ese calculo 
         //y obtener la ruta más rápida 
-        driveMotor.set(state.speedMetersPerSecond/2);//3.5 es la velocidad máxima del sistema, se debe checar 
+        driveMotor.set(state.speedMetersPerSecond/2.5);//3.5 es la velocidad máxima del sistema, se debe checar 
         turningMotor.set(PIDgiro.calculate(getTurningPosition(),state.angle.getRadians()));
+        System.out.println(getState().angle);
     }
     
     public void alto(){
