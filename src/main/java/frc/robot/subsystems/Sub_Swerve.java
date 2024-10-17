@@ -20,7 +20,7 @@ import edu.wpi.first.networktables.StructArrayPublisher;
 public class Sub_Swerve extends SubsystemBase {
   //En este subsistema se unen los 4 modulos y el giroscopio 
   private final Sub_Modulo Modulo_1 = new Sub_Modulo(1, 22, true, false, 9,  0, false);
-  private final Sub_Modulo Modulo_2 = new Sub_Modulo(3, 4, false, true, 10, 0, false);
+  private final Sub_Modulo Modulo_2 = new Sub_Modulo(3, 4, false, false, 10, 0, false);
   private final Sub_Modulo Modulo_3 = new Sub_Modulo(5, 6, false, false, 11, 0, false);
   private final Sub_Modulo Modulo_4 = new Sub_Modulo(7, 8, true, false, 12,0 , false);
   private final AHRS gyro = new AHRS(SPI.Port.kMXP);
@@ -92,5 +92,12 @@ public class Sub_Swerve extends SubsystemBase {
     Modulo_2.resetEncoders();
     Modulo_3.resetEncoders();
     Modulo_4.resetEncoders();
+  }
+
+  public void setSpecificState(SwerveModuleState specificState,SwerveModuleState specificState_1,SwerveModuleState specificState_2,SwerveModuleState specificState_3){
+    Modulo_1.setDesiredState(specificState);
+    Modulo_2.setDesiredState(specificState_1);
+    Modulo_3.setDesiredState(specificState_2);
+    Modulo_4.setDesiredState(specificState_3);
   }
 }

@@ -47,8 +47,9 @@ public class Cmd_Move_Swerve extends Command {
       chassisSpeeds= ChassisSpeeds.fromFieldRelativeSpeeds(velocidady, velocidadx, velocidad_giros, sub_Swerve.get2Drotation());
     }
     else{
-      chassisSpeeds= new ChassisSpeeds(velocidady, velocidadx, velocidad_giros); //Es muy importante recordar que primero es y alias frente
+      chassisSpeeds= new ChassisSpeeds(0, 1, 0); //Es muy importante recordar que primero es y alias frente
       //luego x que es derecha e izquierda y finalmente los giros sobre el eje 
+      
       
     }
     

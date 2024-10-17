@@ -57,7 +57,7 @@ public class Sub_Modulo extends SubsystemBase {
         turningEncoder.setVelocityConversionFactor(Swerve.encoder_a_radianes_por_segundo);
 
         PIDgiro= new PIDController(.08, .005, 0.00);//
-        PIDgiro.enableContinuousInput(0, Math.PI*2);//Permite trabajar con los valores de 180 a -180 
+        PIDgiro.enableContinuousInput(-Math.PI, Math.PI);//Permite trabajar con los valores de 180 a -180 
 
         driveMotor.setIdleMode(IdleMode.kBrake);
         turningMotor.setIdleMode(IdleMode.kBrake);
@@ -85,10 +85,11 @@ public class Sub_Modulo extends SubsystemBase {
         double angulo =(absoluteEncoder.getAbsolutePosition().getValueAsDouble()*2* Math.PI);
         //angulo-=absoluteEncoderOffsetRad; 
         
-        
+        /* 
         if (absoluteEncoderReversed){
           angulo = 2 * Math.PI - angulo;
         }
+        */
         
       
         return angulo * (absoluteEncoderReversed ? -1.0 : 1.0);
@@ -117,6 +118,7 @@ public class Sub_Modulo extends SubsystemBase {
         driveMotor.set(state.speedMetersPerSecond/2.5);//3.5 es la velocidad máxima del sistema, se debe checar 
         turningMotor.set(PIDgiro.calculate(getTurningPosition(),state.angle.getRadians()));
         System.out.println(getState().angle);
+        System.out.println(" ");
     }
     
     public void alto(){
