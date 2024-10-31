@@ -15,8 +15,8 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Swerve;
@@ -31,6 +31,7 @@ public class Sub_Modulo extends SubsystemBase {
     private final CANcoder absoluteEncoder;
     private final boolean absoluteEncoderReversed;
     private final double absoluteEncoderOffsetRad;
+     SwerveModulePosition Position = new SwerveModulePosition();
     //Tiene que llamarse igual 
     //Se crea un constructor, como si fuera un comando o una función para no tener que hacer 4 subsitemas diferentes (1 por modulo)
     public Sub_Modulo (int Drive_Motor_ID, int Turn_Motor_ID, boolean Inverted_Drive_Motor, boolean Inverted_Turning_Motor,int Encoder_Absoluto_ID, double offset_encoder_abs,boolean inverted_encoder_abs){
@@ -55,13 +56,12 @@ public class Sub_Modulo extends SubsystemBase {
 
         turningEncoder.setPositionConversionFactor(Swerve.encoder_a_radianes);//Radianes son más exactos que los angulos 
         turningEncoder.setVelocityConversionFactor(Swerve.encoder_a_radianes_por_segundo);
-
-        PIDgiro= new PIDController(.08, .005, 0.00);//
+        //double gears = Swerve.turning_motor_gear_ratio;
+        PIDgiro= new PIDController(.63, .0, 0.02);//
         PIDgiro.enableContinuousInput(-Math.PI, Math.PI);//Permite trabajar con los valores de 180 a -180 
 
         driveMotor.setIdleMode(IdleMode.kBrake);
         turningMotor.setIdleMode(IdleMode.kBrake);
-
         resetEncoders();
         
     }
@@ -83,15 +83,6 @@ public class Sub_Modulo extends SubsystemBase {
     public double getAbsoluteEncoderRadians(){
         //Al ser un analog input se tiene que checar que valores muestra 
         double angulo =(absoluteEncoder.getAbsolutePosition().getValueAsDouble()*2* Math.PI);
-        //angulo-=absoluteEncoderOffsetRad; 
-        
-        /* 
-        if (absoluteEncoderReversed){
-          angulo = 2 * Math.PI - angulo;
-        }
-        */
-        
-      
         return angulo * (absoluteEncoderReversed ? -1.0 : 1.0);
     }
 
@@ -102,6 +93,10 @@ public class Sub_Modulo extends SubsystemBase {
 
     public SwerveModuleState getState(){
         return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition()));
+    }
+
+    public SwerveModulePosition getModulePosition(){
+        return Position;
     }
 
     public void setDesiredState(SwerveModuleState state){
@@ -115,10 +110,11 @@ public class Sub_Modulo extends SubsystemBase {
         
         state=SwerveModuleState.optimize(state, getState().angle);//330 grados y -30 grados es lo mismo, optimize puede hacer ese calculo 
         //y obtener la ruta más rápida 
-        driveMotor.set(state.speedMetersPerSecond/2.5);//3.5 es la velocidad máxima del sistema, se debe checar 
+        driveMotor.set(state.speedMetersPerSecond/3.5);//3.5 es la velocidad máxima del sistema, se debe checar, 4.47 teorico
+        //https://www.chiefdelphi.com/t/how-to-calculate-the-max-free-speed-of-a-swerve/400741/4
         turningMotor.set(PIDgiro.calculate(getTurningPosition(),state.angle.getRadians()));
-        System.out.println(getState().angle);
-        System.out.println(" ");
+        
+        Position= new SwerveModulePosition(Position.distanceMeters + (state.speedMetersPerSecond*.02), state.angle);
     }
     
     public void alto(){
