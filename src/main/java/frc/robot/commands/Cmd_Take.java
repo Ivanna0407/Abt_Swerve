@@ -4,22 +4,15 @@
 
 package frc.robot.commands;
 
-import java.util.function.Supplier;
-
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.Swerve;
-import frc.robot.subsystems.Sub_Swerve;
+import frc.robot.subsystems.Sub_Intake_Shooter;
 
-public class Cmd_Specific_State extends Command {
-  /** Creates a new Cmd_Specific_State. */
-  private final Sub_Swerve sub_Swerve;
-
-  public Cmd_Specific_State(Sub_Swerve sub_Swerve) {
+public class Cmd_Take extends Command {
+  /** Creates a new Cmd_Take. */
+  private final Sub_Intake_Shooter intake_Shooter;
+  public Cmd_Take(Sub_Intake_Shooter intake_Shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.sub_Swerve=sub_Swerve;
-    
+    this.intake_Shooter=intake_Shooter;
   }
 
   // Called when the command is initially scheduled.
@@ -29,8 +22,9 @@ public class Cmd_Specific_State extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    sub_Swerve.setSpecificState(new SwerveModuleState(.5,Rotation2d.fromRadians(0)), new SwerveModuleState(.5,Rotation2d.fromRadians(0)), new SwerveModuleState(.5,Rotation2d.fromRadians(0)), new SwerveModuleState(.5,Rotation2d.fromRadians(0)));
-    
+    if (intake_Shooter.pieza==false){
+      intake_Shooter.SetAgarre(.8);
+    }
   }
 
   // Called once the command ends or is interrupted.

@@ -27,11 +27,8 @@ public class Cmd_Move_Swerve extends Command {
  
   @Override
   public void initialize() {
-    
     sub_Swerve.zeroHeading();
   }
-
-
   @Override
   public void execute() {
     double velocidadx=Xaxis.get();
@@ -52,8 +49,6 @@ public class Cmd_Move_Swerve extends Command {
       
       
     }
-    
-
     //Manda un arreglo de estados de modulos que pasan por un objeto de Swerve drive kinematics para poder generar las velocidades
     SwerveModuleState[] moduleStates=Swerve.swervekinematics.toSwerveModuleStates(chassisSpeeds);
     sub_Swerve.setModuleStates(moduleStates);

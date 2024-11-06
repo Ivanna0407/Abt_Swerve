@@ -57,7 +57,7 @@ public class Sub_Modulo extends SubsystemBase {
         turningEncoder.setPositionConversionFactor(Swerve.encoder_a_radianes);//Radianes son más exactos que los angulos 
         turningEncoder.setVelocityConversionFactor(Swerve.encoder_a_radianes_por_segundo);
         //double gears = Swerve.turning_motor_gear_ratio;
-        PIDgiro= new PIDController(.63, .0, 0.02);//
+        PIDgiro= new PIDController(.22, .0, 0.0);//
         PIDgiro.enableContinuousInput(-Math.PI, Math.PI);//Permite trabajar con los valores de 180 a -180 
 
         driveMotor.setIdleMode(IdleMode.kBrake);

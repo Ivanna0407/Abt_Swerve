@@ -69,13 +69,21 @@ public class Sub_Intake_Shooter extends SubsystemBase {
       MotorShooterU.set(velocidad_U);
       MotorShooterD.set(velocidad_D);
     }
+    public double getShooterspeed(){
+      return  MotorShooterD.get();
+    }
+    public double getintakespeed(){
+      return  MotorIntakeD.get();
+    }
   
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("Pieza",pieza);
-    if (MotorIntakeD.getOutputCurrent()>=70){
+    SmartDashboard.putNumber("Corriente", MotorIntakeD.getOutputCurrent());
+    SmartDashboard.putNumber("Corriente_1", MotorIntakeI.getOutputCurrent());
+    if (MotorIntakeD.getOutputCurrent()>=52){
       pieza=true;
     }
   }

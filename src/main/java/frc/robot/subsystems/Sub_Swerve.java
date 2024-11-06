@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Swerve;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -42,6 +43,7 @@ public class Sub_Swerve extends SubsystemBase {
 
   public Sub_Swerve() {
     new Thread(()->{try {Thread.sleep(1000); zeroHeading();}catch(Exception e ){}}).start();
+    CameraServer.startAutomaticCapture("Sprite_Cam",0);
     
     publisher = NetworkTableInstance.getDefault()
       .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish(); 
@@ -55,12 +57,8 @@ public class Sub_Swerve extends SubsystemBase {
     SmartDashboard.putNumber("Abs_2", Modulo_2.getAbsoluteEncoderRadians());
     SmartDashboard.putNumber("Abs_3", Modulo_3.getAbsoluteEncoderRadians());
     SmartDashboard.putNumber("Abs_4", Modulo_4.getAbsoluteEncoderRadians());
-    SmartDashboard.putNumber("velocidad_1",Modulo_1.getDriveVelocity());
-    SmartDashboard.putNumber("velocidad_2",Modulo_2.getDriveVelocity());
-    SmartDashboard.putNumber("velocidad_3",Modulo_3.getDriveVelocity());
-    SmartDashboard.putNumber("velocidad_4",Modulo_4.getDriveVelocity());
     publisher.set(new SwerveModuleState[]{Modulo_1.getState(),Modulo_2.getState(),Modulo_3.getState(),Modulo_4.getState()}); 
-    //field.setRobotPose(getPose());   
+    field.setRobotPose(getPose());   
   }
 
   public void zeroHeading(){
@@ -74,7 +72,6 @@ public class Sub_Swerve extends SubsystemBase {
   public Rotation2d get2Drotation(){
     //Permite cambiar de angulos a un objeto de Rotation 2D
     return Rotation2d.fromDegrees(getHeadding());
-
   }
 
   public Pose2d getPose(){
@@ -82,7 +79,6 @@ public class Sub_Swerve extends SubsystemBase {
   }
 
   
-
   public void stopModules(){
     Modulo_1.alto();
     Modulo_2.alto();
@@ -92,7 +88,7 @@ public class Sub_Swerve extends SubsystemBase {
 
   public void setModuleStates(SwerveModuleState[] desiredModuleStates){
     //Se genera un arreglo de swerve module state para poder mandarlos a los diferentes modulos de acuerdo a posición 
-    SwerveDriveKinematics.desaturateWheelSpeeds(desiredModuleStates, 3.5);
+    SwerveDriveKinematics.desaturateWheelSpeeds(desiredModuleStates, 3);
     Modulo_1.setDesiredState(desiredModuleStates[0]);
     Modulo_2.setDesiredState(desiredModuleStates[1]);
     Modulo_3.setDesiredState(desiredModuleStates[2]);

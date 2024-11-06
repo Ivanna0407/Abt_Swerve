@@ -4,22 +4,17 @@
 
 package frc.robot.commands;
 
-import java.util.function.Supplier;
-
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.Swerve;
-import frc.robot.subsystems.Sub_Swerve;
+import edu.wpi.first.wpilibj.Timer;
 
-public class Cmd_Specific_State extends Command {
-  /** Creates a new Cmd_Specific_State. */
-  private final Sub_Swerve sub_Swerve;
-
-  public Cmd_Specific_State(Sub_Swerve sub_Swerve) {
+public class Cmd_Wait extends Command {
+  /** Creates a new Cmd_Wait. */
+  private final double seconds;
+  boolean ending=false;
+  public Cmd_Wait(double seconds) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.sub_Swerve=sub_Swerve;
-    
+    this.seconds=seconds;
+
   }
 
   // Called when the command is initially scheduled.
@@ -29,8 +24,8 @@ public class Cmd_Specific_State extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    sub_Swerve.setSpecificState(new SwerveModuleState(.5,Rotation2d.fromRadians(0)), new SwerveModuleState(.5,Rotation2d.fromRadians(0)), new SwerveModuleState(.5,Rotation2d.fromRadians(0)), new SwerveModuleState(.5,Rotation2d.fromRadians(0)));
-    
+    Timer.delay(seconds);
+    ending=true;
   }
 
   // Called once the command ends or is interrupted.
@@ -40,6 +35,11 @@ public class Cmd_Specific_State extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
-  }
+    if (ending==true){
+      return true;
+    }
+    else{
+      return false;
+    }
+}
 }
