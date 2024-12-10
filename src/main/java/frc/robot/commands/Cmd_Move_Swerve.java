@@ -32,8 +32,8 @@ public class Cmd_Move_Swerve extends Command {
   @Override
   public void execute() {
     double velocidadx=Xaxis.get();
-    double velocidady=(Yaxis.get())*-1;
-    double velocidad_giros=giros.get()*-1;
+    double velocidady=(Yaxis.get());
+    double velocidad_giros=giros.get();
 
     if (Math.abs(Xaxis.get())<0.1){velocidadx=0;}
     if (Math.abs(Yaxis.get())<0.1){velocidady=0;}
@@ -41,13 +41,12 @@ public class Cmd_Move_Swerve extends Command {
 
     ChassisSpeeds chassisSpeeds;
     if (fieldoriented.get()){
-      chassisSpeeds= ChassisSpeeds.fromFieldRelativeSpeeds(velocidady, velocidadx, velocidad_giros, sub_Swerve.get2Drotation());
+      chassisSpeeds= ChassisSpeeds.fromFieldRelativeSpeeds(velocidady*-1, velocidadx, velocidad_giros, sub_Swerve.get2Drotation());
     }
     else{
       chassisSpeeds= new ChassisSpeeds(velocidady,velocidadx, velocidad_giros); //Es muy importante recordar que primero es y alias frente
       //luego x que es derecha e izquierda y finalmente los giros sobre el eje 
-      
-      
+        
     }
     //Manda un arreglo de estados de modulos que pasan por un objeto de Swerve drive kinematics para poder generar las velocidades
     SwerveModuleState[] moduleStates=Swerve.swervekinematics.toSwerveModuleStates(chassisSpeeds);
