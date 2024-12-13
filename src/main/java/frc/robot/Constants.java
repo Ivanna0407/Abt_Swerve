@@ -33,6 +33,7 @@ public final class Constants {
     public static final double trackwidth=.6604;
     //Wheelbase es la distancia entre las dos llantas del lado derecho 
     public static final double wheelbase=.6604;
+    public static final double radio= Math.hypot(trackwidth/2.0, wheelbase/2.0);
     //Para más dudas https://www.chiefdelphi.com/t/measuring-track-width-and-wheel-base-for-swerve-drive-frc/440389
     public static final SwerveDriveKinematics swervekinematics =new SwerveDriveKinematics(
     new Translation2d(wheelbase/2,trackwidth/2), 

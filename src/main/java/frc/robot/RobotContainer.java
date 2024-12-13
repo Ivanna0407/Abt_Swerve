@@ -5,6 +5,8 @@
 package frc.robot;
 
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -50,12 +52,15 @@ public class RobotContainer {
 
 
   public Command getAutonomousCommand() {
+    /* 
     return new SequentialCommandGroup(new Cmd_Auto_Move_Shooter(Intake_Shooter, -1),
       new Cmd_Wait(1),
       new Cmd_Auto_Move_Intake(Intake_Shooter, .6),
       new Cmd_Wait(0.5),
       new Cmd_Auto_Move_Shooter(Intake_Shooter, 0),
       new Cmd_Auto_Move_Intake(Intake_Shooter, 0));
+      */
+      return new PathPlannerAuto("New Auto");
   }
   
   //return null;

@@ -19,8 +19,6 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -29,7 +27,12 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.PathPlannerLogging;
+import com.pathplanner.lib.util.ReplanningConfig;
+
+
 
 
 
@@ -55,42 +58,33 @@ public class Sub_Swerve extends SubsystemBase {
     
     publisher = NetworkTableInstance.getDefault()
       .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish(); 
-   /*  try{
-      RobotConfig config = RobotConfig.fromGUISettings();
-
-      // Configure AutoBuilder
-      AutoBuilder.configure(
-        this::getPose, 
-        this::resetPose, 
-        this::getSpeeds, 
-        this::driveRobotRelative, 
-        new PPHolonomicDriveController(
-          Constants.Swerve.translationConstants,
-          Constants.Swerve.rotationConstants
-        ),
-        config,
-        () -> {
-            // Boolean supplier that controls when the path will be mirrored for the red alliance
-            // This will flip the path being followed to the red side of the field.
-            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-            var alliance = DriverStation.getAlliance();
-            if (alliance.isPresent()) {
-                return alliance.get() == DriverStation.Alliance.Red;
-            }
-            return false;
-        },
-        this
-      );
-    }catch(Exception e){
-      DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", e.getStackTrace());
-    }
-
-    // Set up custom logging to add the current path to a field 2d widget
-    PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
-*/
     SmartDashboard.putData("Field", field);
+
+    AutoBuilder.configureHolonomic(
+      this::getPose, 
+      this::resetPose, 
+      () -> Swerve.swervekinematics.toChassisSpeeds(getModuleStates()), 
+      this::setChassisSpeeds, 
+      new HolonomicPathFollowerConfig(
+        new PIDConstants(.5,0,0), 
+        new PIDConstants(.22,0,0),
+         3.5, 
+         Swerve.radio, 
+         new ReplanningConfig()),
+      () -> {
+            
+        var alliance = DriverStation.getAlliance();
+
+        if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+        }
+        return false;
+    },  
+       this);
+
+    
   }
+  
 
   @Override
   public void periodic() {
@@ -179,6 +173,11 @@ public class Sub_Swerve extends SubsystemBase {
     positions[2]=Modulo_3.getState();
     positions[3]=Modulo_4.getState();
     return positions;
+    }
+
+    public void setChassisSpeeds(ChassisSpeeds chassisSpeeds){
+      SwerveModuleState[] moduleStates= Swerve.swervekinematics.toSwerveModuleStates(chassisSpeeds);
+      this.setModuleStates(moduleStates);
     }
   }
 
